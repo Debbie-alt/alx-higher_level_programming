@@ -1,40 +1,13 @@
-import urllib.request
-import sys
+#!/usr/bin/python3
+"""
+Displays the value of the X-Request-Id variable
+found in the header of the response.
+"""
 
-def get_x_request_id(url):
-    """Fetches the X-Request-Id header value from the given URL using urllib.request.
-
-    Args:
-        url (str): The URL to send the request to.
-
-    Returns:
-        str: The value of the X-Request-Id header, or None if not found.
-    """
-
-    try:
-        # Send the GET request using urllib.request
-        with urllib.request.urlopen(url) as response:
-            headers = response.getheaders()
-            for name, value in headers:
-                if name.lower() == 'x-request-id':
-                    return value
-    except urllib.error.URLError as e:
-        print(f"Error: Failed to retrieve data from {url} - {e}")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-
-    return None
 
 if __name__ == "__main__":
-    # Handle potential lack of arguments gracefully
-    if len(sys.argv) < 2:
-        print("Usage: python script.py <URL>")
-        sys.exit(1)
+    import sys
+    import urllib.request
 
-    url = sys.argv[1]
-    x_request_id = get_x_request_id(url)
-
-    if x_request_id:
-        print(f"X-Request-Id: {x_request_id}")
-    else:
-        print(f"X-Request-Id header not found in response from {url}")  
+    with urllib.request.urlopen(sys.argv[1]) as response:
+        print(response.headers["X-Request-Id"])  
